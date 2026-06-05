@@ -50,7 +50,7 @@ docker run \
 	dockette/vagrant:debian-13-systemd
 ```
 
-### Images
+### Published Images
 
 - `dockette/vagrant:debian-13`
 - `dockette/vagrant:debian-13-systemd`
@@ -58,8 +58,8 @@ docker run \
 - `dockette/vagrant:debian-12-systemd`
 - `dockette/vagrant:debian-11`
 - `dockette/vagrant:debian-11-systemd`
-- `dockette/vagrant:debian-10`
-- `dockette/vagrant:debian-10-systemd`
+
+The Docker workflow publishes Debian 13, 12, and 11 tags. Debian 10 Dockerfiles remain available for local builds, but Debian 10 tags are not part of the current publish matrix.
 
 ## Development
 
@@ -68,6 +68,16 @@ make build
 make test
 make run
 ```
+
+Makefile defaults:
+
+- `DOCKER_IMAGE=dockette/vagrant`
+- `DOCKER_TAG=debian-13-systemd`
+- `DOCKER_PLATFORMS=linux/arm64`
+
+`make build` builds every Makefile-listed context, including the local Debian 10 contexts. `make test` runs `vagrant validate` only. Full CI validation also starts the Docker provider with `vagrant up --provider=docker` and runs the Ansible checks in `.tests/`.
+
+Override `DOCKER_TAG` to run a different image tag and `DOCKER_PLATFORMS` to target another platform, for example `DOCKER_PLATFORMS=linux/amd64 make build`. The default `linux/arm64` platform may use emulation or fail unexpectedly on amd64 hosts without compatible Buildx/QEMU support.
 
 ## Maintenance
 
